@@ -1,6 +1,6 @@
 //go:build !unix && !windows
 
-package portscaner
+package portscanner
 
 func classifySystemError(err error) Status {
 	return StatusError

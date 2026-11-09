@@ -1,4 +1,4 @@
-package portscaner
+package portscanner
 
 import (
 	"context"
@@ -29,7 +29,7 @@ func (t *target) String() string {
 	return net.JoinHostPort(t.ip.String(), strconv.Itoa(t.port))
 }
 
-func genereateTargets(ctx context.Context, hosts, ports []string) (<-chan target, error) {
+func generateTargets(ctx context.Context, hosts, ports []string) (<-chan target, error) {
 	targets := make(chan target, 500)
 
 	parsedPorts, err := parsePorts(ports)

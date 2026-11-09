@@ -1,4 +1,4 @@
-package portscaner
+package portscanner
 
 import (
 	"context"
@@ -10,22 +10,22 @@ var (
 	defaultTimeoutPerTarget = time.Second * 2
 )
 
-type option func(s *Scaner)
+type option func(s *Scanner)
 
-type Scaner struct {
+type Scanner struct {
 	// Workers count per scan. Default 500
 	workersPerScan int
 	// Timeout per network call. Default 2 sec
-	timout time.Duration
+	timeout time.Duration
 }
 
 // New accept [option] args. Available options:
 //   - [WithWorkers] - setup workers count per scan.
 //   - [WithTimeout] - setup timeout per network call.
-func New(opt ...option) (*Scaner, error) {
-	s := &Scaner{
+func New(opt ...option) (*Scanner, error) {
+	s := &Scanner{
 		workersPerScan: defaultWorkersCount,
-		timout:         defaultTimeoutPerTarget,
+		timeout:        defaultTimeoutPerTarget,
 	}
 
 	for _, opt := range opt {
@@ -36,7 +36,7 @@ func New(opt ...option) (*Scaner, error) {
 		return nil, ErrWorkersCount
 	}
 
-	if s.timout < time.Second {
+	if s.timeout < time.Second {
 		return nil, ErrTimeout
 	}
 
@@ -48,13 +48,13 @@ func New(opt ...option) (*Scaner, error) {
 //   - CIDR cant be less then /16 and /112 for ip4 and ip6.
 //   - Ports can be mixed format etc. {"80","443","1000-1500"}.
 //   - Ports can be empty or nil, in this case automaticaly added default ports (1-1000).
-func (s *Scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan Result, error) {
-	targets, err := genereateTargets(ctx, hosts, ports)
+func (s *Scanner) Scan(ctx context.Context, hosts, ports []string) (<-chan Result, error) {
+	targets, err := generateTargets(ctx, hosts, ports)
 	if err != nil {
 		return nil, err
 	}
 
-	pool, err := newPool(s.workersPerScan, targets, s.timout)
+	pool, err := newPool(s.workersPerScan, targets, s.timeout)
 	if err != nil {
 		return nil, err
 	}
@@ -65,13 +65,13 @@ func (s *Scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan Result
 }
 
 func WithWorkers(count int) option {
-	return func(s *Scaner) {
+	return func(s *Scanner) {
 		s.workersPerScan = count
 	}
 }
 
 func WithTimeout(timeout time.Duration) option {
-	return func(s *Scaner) {
-		s.timout = timeout
+	return func(s *Scanner) {
+		s.timeout = timeout
 	}
 }

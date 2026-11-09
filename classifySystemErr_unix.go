@@ -1,6 +1,6 @@
 //go:build unix
 
-package portscaner
+package portscanner
 
 import (
 	"errors"
