@@ -15,6 +15,7 @@ const (
 	StatusUnreachable Status = "unreachable"
 	StatusCanceled    Status = "canceled"
 	StatusError       Status = "error"
+	StatusParsedError Status = "parsed error"
 )
 
 func classifyDialError(err error) Status {

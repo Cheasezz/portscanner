@@ -3,6 +3,7 @@ package portscaner
 import (
 	"context"
 	"net"
+	"net/netip"
 	"sync"
 	"time"
 )
@@ -15,24 +16,29 @@ type pool struct {
 }
 
 type Result struct {
-	Target target
-	// Status is classify dial err. If no err - StatusOpen
-	Status Status
-	// Network call exectution time
+	Source   string
+	IP       netip.Addr
+	Port     int
+	Status   Status
 	Duration time.Duration
-	// Store dial err
-	Err error
+	Err      error
 }
 
-// dial return empty res with only Target field if target has parsing error
 func dial(ctx context.Context, t target, timeout time.Duration) Result {
-	res := Result{Target: t}
+	res := Result{}
 
 	if t.Err != nil {
+		res.Status = StatusParsedError
+		res.Err = t.Err
 		return res
 	}
 
+	res.Source = t.Source
+	res.IP = t.IP
+	res.Port = t.Port
+
 	start := time.Now()
+
 	d := net.Dialer{Timeout: timeout}
 	conn, err := d.DialContext(ctx, t.network, t.String())
 	if err != nil {

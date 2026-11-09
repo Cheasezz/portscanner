@@ -44,7 +44,7 @@ func New(opt ...option) (*Scaner, error) {
 //   - CIDR cant be less then /16 and /112 for ip4 and ip6.
 //   - Ports can be mixed format etc. {"80","443","1000-1500"}.
 //   - Ports can be empty or nil, in this case automaticaly added default ports (1-1000).
-func (s *Scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan result, error) {
+func (s *Scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan Result, error) {
 	targets, err := genereateTargets(ctx, hosts, ports)
 	if err != nil {
 		return nil, err
