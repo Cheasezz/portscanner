@@ -96,17 +96,16 @@ func (p *pool) spawn(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case t, ok := <-p.targets:
-			if !ok {
+			// If use select for ctx.Done, then worker may process
+			// several targets after  ctx cancelation, because
+			// select cant guarantee use ctx cancel branch if both cases is ready.
+			// Check ctx like this can guarantee that after cancelation
+			// one worker do dial maximum one more time and send result to chan.
+			if !ok || ctx.Err() != nil {
 				return
 			}
 
-			res := dial(ctx, t, p.timeoutPerDial)
-
-			select {
-			case <-ctx.Done():
-				return
-			case p.results <- res:
-			}
+			p.results <- dial(ctx, t, p.timeoutPerDial)
 		}
 	}
 }
