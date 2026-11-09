@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/netip"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -29,7 +30,8 @@ type Result struct {
 }
 
 func (r *Result) String() string {
-	return fmt.Sprintf("Source: %s, addr: %s:%d, status: %s, time: %s", r.Source, r.IP, r.Port, r.Status, r.Duration)
+	addr := net.JoinHostPort(r.IP.String(), strconv.Itoa(r.Port))
+	return fmt.Sprintf("Source: %s, addr: %s, status: %s, time: %s", r.Source, addr, r.Status, r.Duration)
 }
 
 func dial(ctx context.Context, t target, timeout time.Duration) Result {
