@@ -15,18 +15,18 @@ const (
 type target struct {
 	// The Source field stores the value indicating
 	// the origin of the ip address (domain name, cidr, single ip)
-	Source string
-	IP     netip.Addr
-	Port   int
+	source string
+	ip     netip.Addr
+	port   int
 	// Only tcp now
 	network string
 	// Store host parsing err. All errors in errors.go
-	Err error
+	err error
 }
 
 // Join host:port for target
 func (t *target) String() string {
-	return net.JoinHostPort(t.IP.String(), strconv.Itoa(t.Port))
+	return net.JoinHostPort(t.ip.String(), strconv.Itoa(t.port))
 }
 
 func genereateTargets(ctx context.Context, hosts, ports []string) (<-chan target, error) {
@@ -54,11 +54,11 @@ func genereateTargets(ctx context.Context, hosts, ports []string) (<-chan target
 				case <-ctx.Done():
 					return
 				case targets <- target{
-					Source:  host.source,
-					IP:      host.ip,
-					Port:    port,
+					source:  host.source,
+					ip:      host.ip,
+					port:    port,
 					network: defaultNetwork,
-					Err:     hostErr,
+					err:     hostErr,
 				}:
 				}
 			}

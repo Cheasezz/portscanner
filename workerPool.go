@@ -35,15 +35,15 @@ func (r *Result) String() string {
 func dial(ctx context.Context, t target, timeout time.Duration) Result {
 	res := Result{}
 
-	if t.Err != nil {
+	if t.err != nil {
 		res.Status = StatusParsedError
-		res.Err = t.Err
+		res.Err = t.err
 		return res
 	}
 
-	res.Source = t.Source
-	res.IP = t.IP
-	res.Port = t.Port
+	res.Source = t.source
+	res.IP = t.ip
+	res.Port = t.port
 
 	start := time.Now()
 
