@@ -17,9 +17,12 @@ type pool struct {
 }
 
 type Result struct {
-	Source   string
-	IP       netip.Addr
-	Port     int
+	// The Source field stores the value indicating
+	// the origin of the ip address (domain name, cidr, single ip)
+	Source string
+	IP     netip.Addr
+	Port   int
+	// Status can be classified dial err/ parsed status err/ ok
 	Status   Status
 	Duration time.Duration
 	Err      error
