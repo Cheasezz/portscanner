@@ -18,6 +18,8 @@ type Result struct {
 	Target target
 	// Status is classify dial err. If no err - StatusOpen
 	Status Status
+	// Network call exectution time
+	Duration time.Duration
 	// Store dial err
 	Err error
 }
@@ -30,6 +32,7 @@ func dial(ctx context.Context, t target, timeout time.Duration) Result {
 		return res
 	}
 
+	start := time.Now()
 	d := net.Dialer{Timeout: timeout}
 	conn, err := d.DialContext(ctx, t.network, t.String())
 	if err != nil {
@@ -38,7 +41,9 @@ func dial(ctx context.Context, t target, timeout time.Duration) Result {
 		return res
 	}
 	conn.Close()
+	dur := time.Since(start)
 
+	res.Duration = dur
 	res.Status = StatusOpen
 	return res
 }
