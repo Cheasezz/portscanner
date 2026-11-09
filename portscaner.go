@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	defaultWorkersCount     = 100
+	defaultWorkersCount     = 500
 	defaultTimeoutPerTarget = time.Second * 2
 )
 
