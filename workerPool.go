@@ -51,13 +51,13 @@ func dial(ctx context.Context, t target, timeout time.Duration) Result {
 	conn, err := d.DialContext(ctx, t.network, t.String())
 	if err != nil {
 		res.Status = classifyDialError(err)
+		res.Duration = time.Since(start)
 		res.Err = err
 		return res
 	}
 	conn.Close()
-	dur := time.Since(start)
 
-	res.Duration = dur
+	res.Duration = time.Since(start)
 	res.Status = StatusOpen
 	return res
 }
