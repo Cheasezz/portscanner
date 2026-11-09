@@ -14,7 +14,7 @@ var (
 	ErrInvalidPort      = errors.New("invalid port")
 	ErrInvalidPortRange = errors.New("invalid port range (min 1, max 65535)")
 	ErrWorkersCount     = errors.New("workers count cant be less then 1")
-	ErrTimeout          = errors.New("timeout cant be less then 1 sec")
+	ErrTimeout          = errors.New("timeout cant be less then 0")
 )
 
 // ---- Typed errors ----

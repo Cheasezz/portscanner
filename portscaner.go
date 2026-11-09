@@ -36,7 +36,7 @@ func New(opt ...option) (*Scanner, error) {
 		return nil, ErrWorkersCount
 	}
 
-	if s.timeout < time.Second {
+	if s.timeout <= 0 {
 		return nil, ErrTimeout
 	}
 
