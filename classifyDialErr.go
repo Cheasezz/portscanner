@@ -6,18 +6,18 @@ import (
 	"net"
 )
 
-type status string
+type Status string
 
 const (
-	StatusOpen        status = "open"
-	StatusClosed      status = "closed"
-	StatusTimeout     status = "timeout"
-	StatusUnreachable status = "unreachable"
-	StatusCanceled    status = "canceled"
-	StatusError       status = "error"
+	StatusOpen        Status = "open"
+	StatusClosed      Status = "closed"
+	StatusTimeout     Status = "timeout"
+	StatusUnreachable Status = "unreachable"
+	StatusCanceled    Status = "canceled"
+	StatusError       Status = "error"
 )
 
-func classifyDialError(err error) status {
+func classifyDialError(err error) Status {
 	if errors.Is(err, context.Canceled) {
 		return StatusCanceled
 	}

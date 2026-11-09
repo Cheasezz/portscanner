@@ -9,22 +9,22 @@ import (
 
 type pool struct {
 	workers        int
-	results        chan result
+	results        chan Result
 	targets        <-chan target
 	timeoutPerDial time.Duration
 }
 
-type result struct {
+type Result struct {
 	Target target
 	// Status is classify dial err. If no err - StatusOpen
-	Status status
+	Status Status
 	// Store dial err
 	Err error
 }
 
 // dial return empty res with only Target field if target has parsing error
-func dial(ctx context.Context, t target, timeout time.Duration) result {
-	res := result{Target: t}
+func dial(ctx context.Context, t target, timeout time.Duration) Result {
+	res := Result{Target: t}
 
 	if t.Err != nil {
 		return res
@@ -46,7 +46,7 @@ func dial(ctx context.Context, t target, timeout time.Duration) result {
 func newPool(workers int, targets <-chan target, timeoutPerDial time.Duration) (*pool, error) {
 	p := &pool{
 		workers:        workers,
-		results:        make(chan result, 500),
+		results:        make(chan Result, 500),
 		targets:        targets,
 		timeoutPerDial: timeoutPerDial,
 	}
@@ -54,7 +54,7 @@ func newPool(workers int, targets <-chan target, timeoutPerDial time.Duration) (
 	return p, nil
 }
 
-func (p *pool) startPool(ctx context.Context) <-chan result {
+func (p *pool) startPool(ctx context.Context) <-chan Result {
 	var wg sync.WaitGroup
 
 	for range p.workers {

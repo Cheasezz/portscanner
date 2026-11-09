@@ -10,9 +10,9 @@ var (
 	defaultTimeoutPerTarget = time.Second * 2
 )
 
-type option func(s *scaner)
+type option func(s *Scaner)
 
-type scaner struct {
+type Scaner struct {
 	// Workers count per scan. Default 500
 	workersPerScan int
 	// Timeout per network call. Default 2 sec
@@ -22,8 +22,8 @@ type scaner struct {
 // New accept [option] args. Available options:
 //   - [WithWorkers] - setup workers count per scan.
 //   - [WithTimeout] - setup timeout per network call.
-func New(opt ...option) (*scaner, error) {
-	s := &scaner{
+func New(opt ...option) (*Scaner, error) {
+	s := &Scaner{
 		workersPerScan: defaultWorkersCount,
 		timout:         defaultTimeoutPerTarget,
 	}
@@ -44,7 +44,7 @@ func New(opt ...option) (*scaner, error) {
 //   - CIDR cant be less then /16 and /112 for ip4 and ip6.
 //   - Ports can be mixed format etc. {"80","443","1000-1500"}.
 //   - Ports can be empty or nil, in this case automaticaly added default ports (1-1000).
-func (s *scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan result, error) {
+func (s *Scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan result, error) {
 	targets, err := genereateTargets(ctx, hosts, ports)
 	if err != nil {
 		return nil, err
@@ -61,13 +61,13 @@ func (s *scaner) Scan(ctx context.Context, hosts, ports []string) (<-chan result
 }
 
 func WithWorkers(count int) option {
-	return func(s *scaner) {
+	return func(s *Scaner) {
 		s.workersPerScan = count
 	}
 }
 
 func WithTimeout(timeout time.Duration) option {
-	return func(s *scaner) {
+	return func(s *Scaner) {
 		s.timout = timeout
 	}
 }

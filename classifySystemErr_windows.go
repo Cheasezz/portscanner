@@ -13,7 +13,7 @@ const (
 	wsaNetUnreach  syscall.Errno = 10051
 )
 
-func classifySystemError(err error) status {
+func classifySystemError(err error) Status {
 	switch {
 	case errors.Is(err, wsaConnRefused):
 		return StatusClosed

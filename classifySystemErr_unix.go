@@ -7,7 +7,7 @@ import (
 	"syscall"
 )
 
-func classifySystemError(err error) status {
+func classifySystemError(err error) Status {
 	switch {
 	case errors.Is(err, syscall.ECONNREFUSED):
 		return StatusClosed

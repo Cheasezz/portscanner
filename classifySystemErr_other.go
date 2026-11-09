@@ -2,6 +2,6 @@
 
 package portscaner
 
-func classifySystemError(err error) status {
+func classifySystemError(err error) Status {
 	return StatusError
 }
