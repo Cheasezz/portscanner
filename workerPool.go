@@ -15,6 +15,8 @@ type pool struct {
 	results        chan Result
 	targets        <-chan target
 	timeoutPerDial time.Duration
+	// Need for change dial in tests
+	dial func(ctx context.Context, t target, timeout time.Duration) Result
 }
 
 type Result struct {
@@ -70,6 +72,7 @@ func newPool(workers int, targets <-chan target, timeoutPerDial time.Duration) (
 		results:        make(chan Result, 500),
 		targets:        targets,
 		timeoutPerDial: timeoutPerDial,
+		dial:           dial,
 	}
 
 	return p, nil
@@ -107,7 +110,7 @@ func (p *pool) spawn(ctx context.Context) {
 				return
 			}
 
-			p.results <- dial(ctx, t, p.timeoutPerDial)
+			p.results <- p.dial(ctx, t, p.timeoutPerDial)
 		}
 	}
 }
