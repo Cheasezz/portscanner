@@ -2,6 +2,7 @@ package portscaner
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"net/netip"
 	"sync"
@@ -22,6 +23,10 @@ type Result struct {
 	Status   Status
 	Duration time.Duration
 	Err      error
+}
+
+func (r *Result) String() string {
+	return fmt.Sprintf("Source: %s, addr: %s:%d, status: %s, time: %s", r.Source, r.IP, r.Port, r.Status, r.Duration)
 }
 
 func dial(ctx context.Context, t target, timeout time.Duration) Result {
